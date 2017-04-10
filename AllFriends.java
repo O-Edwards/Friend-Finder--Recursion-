@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class AllFriends {
 	
@@ -14,38 +15,44 @@ public class AllFriends {
 	ArrayList<String> indirect = new ArrayList<String>();
 	
 	if (num==0){
+		//Go through names array
 		for (int i=0;i<names.length;i++){
+			//If name entered is within the array
 			if(names[i].equalsIgnoreCase(name)){
+				//Look at the corresponding numbers array
 				for(int j=0;j<numbers[i].length();j++){
+					//If the current character is a 1
 					if(numbers[i].charAt(j)=='1'){
 						System.out.println(name+" is friends with "+names[j]);
-						//indirect.add(names[j]);//New stuff
+						
 					}
 				}
 			}
 		}
 	}
-	else//New Stuff
-		/*for(int f=0;f<indirect.size();f++){
-			directFriends(indirect.get(f),names,numbers,0);//System.out.println(name+" is friends with "+names[j]);
-		}
-		 * 
-		 * 	 
-		 */
+	else
+		//Go through names array
 		for (int i=0;i<names.length;i++){
+			//To see if name entered is the same as a name from the list
 			if(names[i].equalsIgnoreCase(name)){
+				//For each character in the individual number String
 				for(int j=0;j<numbers[i].length();j++){
+					//Check if it's a 1(Friends)
 					if(numbers[i].charAt(j)=='1'){
+						//Then add this friend to the group of people needed to be friend searched 
 						indirect.add(names[j]);//New stuff
-						System.out.println("1");
-						if(j==numbers[i].length()-1 && i==names.length-1){
+						//If 
+						if(j==numbers[i].lastIndexOf("1") ) {
+						
 							for(int f=0;f<indirect.size();f++){
-							
-								directFriends(indirect.get(f),names,numbers,0);
+								num--;
+								directFriends(name,names,numbers,num);
+								System.out.println("Indirect Friends of "+name+":");
+								directFriends(indirect.get(f),names,numbers,num);
+								
 							}
 						}
-						else {
-							continue;}
+						
 					}
 				}
 			}
@@ -57,8 +64,13 @@ public class AllFriends {
 	
 	public static void main(String[] args) throws IOException {
 		
-		//Initialize Counter
+	//Initialization of Variable
 		int counter=0;
+		String option=null;
+		Scanner input = new Scanner(System.in);
+		
+	//ArrayL
+		ArrayList<String> namesCont = new ArrayList<String>();
 	
 	// Open the file
 		FileInputStream fstream = new FileInputStream("C:/CodeRepository/CS 342 Homework/src//Homework7/friends.txt");
@@ -133,8 +145,30 @@ public class AllFriends {
 					
 			}
 		}
-   //Blah Blah
-		directFriends("Smith", names, numbers,1);
+	//Array List Maker
+		for(int i=0;i<names.length;i++){
+			namesCont.add(names[i]);
+		}
+   //Program
+		System.out.print("Enter then name of a person whose friends you want to find (enter 0 for exit): ");
+		option = input.next();
+		while(!option.equalsIgnoreCase("0")) {
+			
+				if(namesCont.contains(option)){
+					directFriends(option,names,numbers,1);
+					System.out.print("Enter then name of a person whose friends you want to find (enter 0 for exit): ");
+					option = input.next();
+				}
+				else {
+					System.out.print("Invalid name request, Enter then name of a person whose friends you want to find (enter 0 for exit): ");
+					option = input.next();
+					
+				}
+				
+			}
+		System.exit(0);
+		}
+		
 		
 	}
-}
+
